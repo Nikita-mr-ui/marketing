@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
     greetingTimeout: 15000,   
     auth: {
        user: 'backupsmart.team@mail.ru', 
-       pass: 'nxMmvgThaQL5HGrsbGys'
+       pass: 'i2Wy34daZQWok8i7ZmHx'
     }
 });
 
