@@ -1,0 +1,35 @@
+name: BackupSmart Marketing Bot
+
+# Запуск по расписанию (cron) или вручную кнопкой из панели GitHub
+on:
+  schedule:
+    - cron: '*/25 * * * *' # Облачный агент будет автоматически просыпаться каждые 25 минут!
+  workflow_dispatch: # Позволяет запускать бота руками в один клик
+
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v4
+      with:
+        node-node-version: '20'
+
+    - name: Install Dependencies
+      run: npm install nodemailer
+
+    - name: Execute BackupSmart Bot
+      run: node bot.js
+
+    - name: Commit and Push Updated Targets
+      run: |
+        git config --global user.name "backupsmart-bot"
+        git config --global user.email "backupsmart.team@mail.ru"
+        git add targets.json
+        git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Bot: targets.json updated" && git push)
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
